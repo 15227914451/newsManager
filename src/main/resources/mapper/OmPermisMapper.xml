@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plg.shiro.dao.OmPermisMapper">
+	<resultMap id="BaseResultMap" type="com.plg.shiro.entity.OmPermis">
+		<id 	column="permis_id" 			jdbcType="INTEGER" 		property="permisId" />
+		<result column="permis_name" 		jdbcType="VARCHAR" 		property="permisName" />
+		<result column="menu_permis_flag" 	jdbcType="TINYINT" 		property="menuPermisFlag" />
+		<result column="permis_code" 		jdbcType="VARCHAR" 		property="permisCode" />
+		<result column="remark" 			jdbcType="VARCHAR" 		property="remark" />
+		<result column="permis_order" 		jdbcType="INTEGER" 		property="permisOrder" />
+		<result column="create_time" 		jdbcType="TIMESTAMP" 	property="createTime" />
+		<result column="update_time" 		jdbcType="TIMESTAMP" 	property="updateTime" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		permis_id, permis_name, menu_permis_flag,
+		permis_code, remark,
+		permis_order, create_time
+	</sql>
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from om_permis
+		where 
+			permis_id = #{permisId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByUserId" resultMap="BaseResultMap">
+		select
+			op.permis_id,
+			op.permis_name,
+			op.permis_code
+		from 
+			om_permis op,
+			role_permis rp,
+			user_role oro
+		where 
+			op.permis_id=rp.permis_id 
+		and rp.role_id = oro.role_id
+		and oro.user_id = #{userId}
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from om_permis
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from om_permis where permis_id = #{permisId,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.plg.shiro.entity.OmPermis">
+		insert into om_permis(
+			permis_id, 
+			parent_permis_id, 
+			permis_name,
+			menu_permis_flag,
+			permis_code, 
+			remark,
+			permis_order, 
+			create_time, 
+			update_time
+		) values (
+			#{permisId,jdbcType=INTEGER}, 
+			#{parentPermisId,jdbcType=INTEGER},
+			#{permisName,jdbcType=VARCHAR},
+			#{menuPermisFlag,jdbcType=TINYINT},
+			#{permisCode,jdbcType=VARCHAR}, 
+			#{remark,jdbcType=VARCHAR},
+			#{permisOrder,jdbcType=INTEGER}, 
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.plg.shiro.entity.OmPermis">
+		update om_permis
+		<set>
+			<if test="parentPermisId != null">
+				parent_permis_id = #{parentPermisId,jdbcType=INTEGER},
+			</if>
+			<if test="permisName != null">
+				permis_name = #{permisName,jdbcType=VARCHAR},
+			</if>
+			<if test="menuPermisFlag != null">
+				menu_permis_flag = #{menuPermisFlag,jdbcType=TINYINT},
+			</if>
+			<if test="permisCode != null">
+				permis_code = #{permisCode,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="permisOrder != null">
+				permis_order = #{permisOrder,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where permis_id = #{permisId,jdbcType=INTEGER}
+	</update>
+
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plg.shiro.dao.UserRoleMapper">
+	<resultMap id="BaseResultMap" type="com.plg.shiro.entity.UserRole">
+		<id 	column="id" 			jdbcType="INTEGER" 		property="id" />
+		<result column="role_id" 		jdbcType="INTEGER" 		property="roleId" />
+		<result column="user_id" 		jdbcType="INTEGER" 		property="userId" />
+		<result column="create_time" 	jdbcType="TIMESTAMP" 	property="createTime" />
+		<result column="update_time" 	jdbcType="TIMESTAMP" 	property="updateTime" />
+	</resultMap>
+	
+	<resultMap id="userRoleMap" type="com.plg.shiro.bo.UserRoleBo">
+		<id 	column="id" 			jdbcType="INTEGER" 		property="id" />
+		<result column="user_id" 		jdbcType="INTEGER" 		property="userId" />
+		<result column="user_name" 		jdbcType="VARCHAR" 		property="userName" />
+		<result column="role_id" 		jdbcType="INTEGER" 		property="roleId" />
+		<result column="role_name" 		jdbcType="VARCHAR" 		property="roleName" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, role_id, user_id, create_time, update_time
+	</sql>
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from user_role
+		where 
+			id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectAll" resultMap="userRoleMap">
+		select 
+			ur.id,
+			ur.user_id,
+			ou.user_name,
+			ur.role_id,
+			omr.role_name
+		from 
+			user_role ur left join om_user ou on ur.user_id = ou.user_id
+			left join om_role omr on ur.role_id = omr.role_id
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from user_role where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.plg.shiro.entity.UserRole">
+		insert into user_role (
+			id, 
+			role_id, 
+			user_id,
+			create_time, 
+			update_time
+		) values (
+			#{id,jdbcType=INTEGER}, 
+			#{roleId,jdbcType=INTEGER},
+			#{userId,jdbcType=INTEGER},
+			#{createTime,jdbcType=TIMESTAMP}, 
+			#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.plg.shiro.entity.UserRole">
+		update user_role
+		<set>
+			<if test="roleId != null">
+				role_id = #{roleId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
