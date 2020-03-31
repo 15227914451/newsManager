@@ -1,1 +1,8 @@
-springmvc-mybatis-shiro
+项目环境：mysql,tomcat,maven
+开发工具：eclipse
+数据库初始化sql：/doc/admin.sql
+修改数据库地址配置：/src/main/resources/jdbc.properties
+注意：在tomcat 的</Context> 之前添加<Loader delegate="true"/>
+
+后台访问地址：localhost:8080/home    账号：super_admin   密码：123456
+前台访问地址：localhost:8080
