@@ -24,6 +24,7 @@
 			</list>
 		</property>
 	</bean>
+	
 
 	<import resource="classpath:beans/beans-*.xml" />
 

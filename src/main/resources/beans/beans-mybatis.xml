@@ -16,14 +16,37 @@
 	<!-- 
 		destroy-method="close"：作用是当数据库连接不使用的时候,就把该连接重新放到数据池中,方便下次使用调用.
 	 -->
-     <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
-		destroy-method="close" primary="true">
-		<property name="driverClassName" value="${driver}" />
-		<property name="url" value="${url}" />
-		<property name="username" value="${username}" />
-		<property name="password" value="${password}" />
+	 <context:property-placeholder location="classpath:jdbc.properties"/>
+	 <bean id="dataSourceTemplate" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	   <property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
 
-        <property name="testWhileIdle" value="true"/>
+       <!-- <property  name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="validationQuery" value="select 1"/>
+        <property name="timeBetweenEvictionRunsMillis" value="900000"/>
+		<property name="maxActive" value="${maxActive}" />
+        <property name="maxIdle" value="${maxIdle}" />
+        <property name="minIdle" value="${minIdle}"/>
+        <property name="maxWait" value="${maxWait}"/>
+        <property name="initialSize" value="${initialSize}"/> -->
+	</bean>
+
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
+   		<property name="dataSource" ref="dataSourceTemplate"/>
+	</bean> 
+	 
+     <!-- <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+		destroy-method="close" primary="true">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+       <property name="testWhileIdle" value="true"/>
         <property name="testOnBorrow" value="false"/>
         <property name="testOnReturn" value="false"/>
         <property name="validationQuery" value="select 1"/>
@@ -33,7 +56,7 @@
         <property name="minIdle" value="${minIdle}"/>
         <property name="maxWait" value="${maxWait}"/>
         <property name="initialSize" value="${initialSize}"/>
-	</bean>
+	</bean> -->
 	
 	<!-- spring和mybatis完美结合，自动扫描包路径下的mybatis配置文件 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

@@ -2,7 +2,6 @@ eclipse.preferences.version=1
 encoding//src/main/java=UTF-8
 encoding//src/main/webapp/WEB-INF/views/403.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/error.jsp=UTF-8
-encoding//src/main/webapp/WEB-INF/views/login.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/menu/accounting_department.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/menu/administrative_department.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/menu/marketing_department.jsp=UTF-8

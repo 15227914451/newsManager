@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plg.shiro.dao.SellersInfoMapper">
+	<resultMap id="BaseResultMap" type="com.plg.shiro.entity.SellersInfo">
+		<id 	column="id" 		jdbcType="INTEGER" 		property="id" />
+		<result column="sellers_name" 		jdbcType="VARCHAR" 		property="sellersName" />
+		<result column="goods_id" 		jdbcType="VARCHAR" 		property="goodsId" />
+		<result column="create_time" 	jdbcType="TIMESTAMP" 	property="createTime" />
+		<result column="update_time" 	jdbcType="TIMESTAMP" 	property="updateTime" />
+		<result 	column="user_id" 		jdbcType="INTEGER" 		property="userId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, sellers_name, goods_id, user_id, create_time,
+		update_time
+	</sql>
+	
+	<select id="findAllList"  parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		select * from sellers_info 
+		 <where>
+            <if test="sellersName!=null">
+                and sellers_name like  #{sellersName}
+            </if>
+            <if test="userId!=null">
+                and user_id =  #{userId}
+            </if>
+        </where>
+		
+		 limit #{begin} , #{rows}
+	</select>
+	<select id="findSize"  parameterType="java.util.HashMap" resultType="Integer">
+		select count(1) from sellers_info 
+		 <where>
+            <if test="sellersName!=null">
+                and sellers_name like  #{sellersName}
+            </if>
+        </where>
+	</select>
+	<select id="findOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sellers_info
+		where 
+			id = #{sellersId,jdbcType=INTEGER}
+	</select>
+	
+	
+	
+	
+	<delete id="delate" parameterType="java.util.HashMap">
+		delete from sellers_info
+		<where>
+            <if test="id!=null">
+                and id =  #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+	</delete>
+	
+	<insert id="insert" parameterType="com.plg.shiro.entity.SellersInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into sellers_info (
+			id,
+			sellers_name,
+			goods_id,
+			create_time,
+			update_time,
+			user_id
+		) values ( 
+			#{id,jdbcType=INTEGER},
+			#{sellersName,jdbcType=VARCHAR},
+			#{goodsId,jdbcType=INTEGER},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{userId,jdbcType=INTEGER}
+		)
+	</insert>
+	
+</mapper>

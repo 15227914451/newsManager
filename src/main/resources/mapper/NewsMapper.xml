@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plg.shiro.dao.NewsMapper">
+    
+   
+	<resultMap id="BaseResultMap" type="com.plg.shiro.entity.News">
+		<id 	column="id" 		jdbcType="INTEGER" 		property="id" />
+		<result column="news_content" 		jdbcType="LONGVARCHAR" 		property="newsContent" />
+		<result column="news_title" 		jdbcType="LONGVARCHAR" 		property="newsTitle" />
+		<result column="news_sort" 		jdbcType="INTEGER" 		property="newsSort" />
+		<result column="catogry_id" 		jdbcType="INTEGER" 		property="catogryId" />
+		<result column="click_rate" 		jdbcType="INTEGER" 		property="clickRate" />
+		<result column="news_author" 		jdbcType="VARCHAR" 		property="newsAuthor" />
+		
+		<result column="create_time" 	jdbcType="TIMESTAMP" 	property="createTime" />
+		<result column="update_time" 	jdbcType="TIMESTAMP" 	property="updateTime" />
+		
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, news_content, news_title,  create_time, update_time, news_sort,catogry_id,click_rate,news_author
+	</sql>
+	
+	
+	
+	
+	<select id="findAllList"  parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		select * from news
+		<where>
+            <if test="newsTitle!=null">
+                and news_title like  #{newsTitle}
+            </if>
+            <if test="catogryId!=null">
+                and catogry_id =  #{catogryId}
+            </if>
+        </where>
+		
+		 limit #{begin} , #{rows}
+	</select>
+	<select id="findSize"  parameterType="java.util.HashMap" resultType="Integer">
+		select count(1) from news 
+		 <where>
+            <if test="newsTitle!=null">
+                and news_title like  #{newsTitle}
+            </if>
+            <if test="catogryId!=null">
+                and catogry_id =  #{catogryId}
+            </if>
+        </where>
+	</select>
+	
+	
+	
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from news
+		<where>
+            <if test="id!=null">
+                and id =  #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+	</delete>
+	<insert id="insert" parameterType="com.plg.shiro.entity.News" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into news (
+			id,
+			news_content,
+			create_time,
+			news_title,
+			news_sort,
+			update_time,
+			news_author,
+			click_rate,
+			catogry_id
+			
+			
+		) values ( 
+			#{id,jdbcType=INTEGER},
+			#{newsContent,jdbcType=LONGVARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{newsTitle,jdbcType=LONGVARCHAR},
+			#{newsSort,jdbcType=INTEGER},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{newsAuthor,jdbcType=VARCHAR},
+			#{clickRate,jdbcType=INTEGER},
+			#{catogryId,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update news
+		<set>
+			<if test="newsContent != null">
+				news_content = #{newsContent,jdbcType=VARCHAR},
+			</if>
+			<if test="newsTitle != null">
+				news_title = #{newsTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="newsSort != null">
+				news_sort = #{newsSort,jdbcType=INTEGER},
+			</if>
+			<if test="catogryId != null">
+				catogry_id = #{catogryId,jdbcType=INTEGER},
+			</if>
+			<if test="clickRate != null">
+				click_Rate = #{clickRate,jdbcType=INTEGER},
+			</if>
+			<if test="newsAuthor != null">
+				news_author = #{newsAuthor,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<select id="findOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from news
+		where 
+			id = #{id,jdbcType=INTEGER}
+	</select>
+</mapper>

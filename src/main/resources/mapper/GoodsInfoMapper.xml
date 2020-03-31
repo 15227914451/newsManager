@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plg.shiro.dao.GoodsInfoMapper">
+	<resultMap id="BaseResultMap" type="com.plg.shiro.entity.GoodsInfo">
+		<id 	column="id" 		jdbcType="INTEGER" 		property="id" />
+		<result column="goods_name" 		jdbcType="VARCHAR" 		property="goodsName" />
+		<result column="office_name" 		jdbcType="VARCHAR" 		property="officeName" />
+		<result column="goods_describe" 		jdbcType="VARCHAR" 		property="goodsDescribe" />
+		<result column="quality_period" 		jdbcType="VARCHAR" 		property="qualityPeriod" />
+		<result column="product_ids" 		jdbcType="VARCHAR" 		property="productIds" />
+		<result column="create_time" 	jdbcType="TIMESTAMP" 	property="createTime" />
+		<result column="manufacture_time" 	jdbcType="TIMESTAMP" 	property="manufactureTime" />
+		<result column="update_time" 	jdbcType="TIMESTAMP" 	property="updateTime" />
+		<result 	column="user_id" 		jdbcType="INTEGER" 		property="userId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, goods_name, office_name, goods_describe, quality_period, product_ids, create_time,
+		manufacture_time,
+		update_time
+	</sql>
+	
+	<select id="findAllList"  parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		select * from goods_info 
+		 <where>
+            <if test="goodsName!=null">
+                and goods_name like  #{goodsName}
+            </if>
+            <if test="userId!=null">
+                and user_id =  #{userId}
+            </if>
+        </where>
+		
+		 limit #{begin} , #{rows}
+	</select>
+	<select id="findSize"  parameterType="java.util.HashMap" resultType="Integer">
+		select count(1) from goods_info 
+		 <where>
+            <if test="goodsName!=null">
+                and goods_name like  #{goodsName}
+            </if>
+        </where>
+	</select>
+	<select id="findOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from goods_info
+		where 
+			id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="queryUseMenu" resultMap="BaseResultMap">
+		select 
+			om.menu_id,
+			om.menu_text,
+			om.menu_url
+		from 
+			user_role oro,
+			role_permis rp,
+			om_menu om
+		where 
+			oro.user_id = #{userId}
+		and rp.role_id = oro.role_id
+		and om.permis_id = rp.permis_id
+		order by om.menu_order	
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from om_menu
+	</select>
+	
+	<delete id="delate" parameterType="java.util.HashMap">
+		delete from goods_info
+		<where>
+            <if test="id!=null">
+                and id =  #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+	</delete>
+	
+	<insert id="insert" parameterType="com.plg.shiro.entity.GoodsInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into goods_info (
+			id,
+			goods_name,
+			office_name,
+			quality_period,
+			product_ids,
+			create_time,
+			manufacture_time,
+			update_time,
+			user_id,
+			goods_describe
+		) values ( 
+			#{id,jdbcType=INTEGER},
+			#{goodsName,jdbcType=VARCHAR},
+			#{officeName,jdbcType=VARCHAR},
+			#{qualityPeriod,jdbcType=VARCHAR},
+			#{productIds,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{manufactureTime,jdbcType=TIMESTAMP},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{userId,jdbcType=INTEGER},
+			#{goodsDescribe,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update goods_info
+		<set>
+			<if test="goodsName != null">
+				goods_name = #{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="officeName != null">
+				office_name = #{officeName,jdbcType=VARCHAR},
+			</if>
+			<if test="manufactureTime != null">
+				manufacture_time = #{manufactureTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="goodsDescribe != null">
+				goods_describe = #{goodsDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="qualityPeriod != null">
+				quality_period = #{qualityPeriod,jdbcType=VARCHAR},
+			</if>
+			<if test="productIds != null">
+				product_ids = #{productIds,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

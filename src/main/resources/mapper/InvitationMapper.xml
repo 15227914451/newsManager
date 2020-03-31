@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plg.shiro.dao.InvitationMapper">
+	<resultMap id="BaseResultMap" type="com.plg.shiro.entity.Invitation">
+		<id 	column="id" 		jdbcType="INTEGER" 		property="id" />
+		<result column="invitation_content" 		jdbcType="LONGVARCHAR" 		property="invitationContent" />
+		<result column="update_time" 	jdbcType="TIMESTAMP" 	property="updateTime" />
+		<result column="create_time" 	jdbcType="TIMESTAMP" 	property="createTime" />
+		<result 	column="user_id" 		jdbcType="INTEGER" 		property="userId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, invitation_content,user_id,create_time,
+		update_time
+	</sql>
+	
+	<select id="findAllList"  parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		select * from invitation 
+		 <where>
+            <if test="userId!=null">
+                and user_id =  #{userId}
+            </if>
+        </where>
+		
+		 limit #{begin} , #{rows}
+	</select>
+	<select id="findSize"  parameterType="java.util.HashMap" resultType="Integer">
+		select count(1) from invitation 
+		 <where>
+            <if test="userId!=null">
+                and user_id =  #{userId}
+            </if>
+        </where>
+	</select>
+	<select id="findOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from invitation
+		where 
+			id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="queryUseMenu" resultMap="BaseResultMap">
+		select 
+			om.menu_id,
+			om.menu_text,
+			om.menu_url
+		from 
+			user_role oro,
+			role_permis rp,
+			om_menu om
+		where 
+			oro.user_id = #{userId}
+		and rp.role_id = oro.role_id
+		and om.permis_id = rp.permis_id
+		order by om.menu_order	
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from om_menu
+	</select>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from invitation
+		<where>
+            <if test="id!=null">
+                and id =  #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+	</delete>
+	
+	<insert id="insert" parameterType="com.plg.shiro.entity.GoodsInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into invitation (
+			id,
+			invitation_content,
+			
+			create_time,
+			update_time,
+			user_id
+		) values ( 
+			#{id,jdbcType=INTEGER},
+			#{invitationContent,jdbcType=LONGVARCHAR},
+			
+			#{createTime,jdbcType=TIMESTAMP},
+			
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{userId,jdbcType=INTEGER}
+			
+		)
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update invitation
+		<set>
+			<if test="invitationContent != null">
+				invitation_Content = #{invitationContent,jdbcType=LONGVARCHAR},
+			</if>
+			
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plg.shiro.dao.UserInfoMapper">
+	<resultMap id="BaseResultMap" type="com.plg.shiro.entity.UserInfo">
+		<id 	column="id" 		jdbcType="INTEGER" 		property="id" />
+		<result column="user_name" 		jdbcType="VARCHAR" 		property="userName" />
+		<result column="password" 		jdbcType="VARCHAR" 		property="password" />
+		<result column="mobile" 		jdbcType="VARCHAR" 		property="mobile" />
+		<result column="create_time" 	jdbcType="TIMESTAMP" 	property="createTime" />
+		<result column="update_time" 	jdbcType="TIMESTAMP" 	property="updateTime" />
+		<result 	column="status" 		jdbcType="INTEGER" 		property="status" />
+		<result 	column="score" 		jdbcType="INTEGER" 		property="score" />
+		<result 	column="grade" 		jdbcType="INTEGER" 		property="grade" />
+		<result 	column="audience" 		jdbcType="INTEGER" 		property="audience" />
+		<result 	column="audience_reason" 		jdbcType="VARCHAR" 		property="audienceReason" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, user_name, password, mobile, create_time, update_time, status,
+		score,
+		grade
+	</sql>
+	
+	<select id="findAllList"  parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		select * from user_info 
+		 <where>
+            <if test="userName!=null">
+                and user_name like  #{userName}
+            </if>
+            <if test="id!=null">
+                and id =  #{id}
+            </if>
+            <if test="mobile!=null">
+                and mobile =  #{mobile}
+            </if>
+        </where>
+		
+		 limit #{begin} , #{rows}
+	</select>
+	<select id="findSize"  parameterType="java.util.HashMap" resultType="Integer">
+		select count(1) from user_info 
+		 <where>
+            <if test="userName!=null">
+                and user_name like  #{userName}
+            </if>
+            <if test="id!=null">
+                and id =  #{id}
+            </if>
+            <if test="mobile!=null">
+                and mobile =  #{mobile}
+            </if>
+        </where>
+	</select>
+	<select id="findOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_info
+		where 
+			id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="findOneByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_info
+		where 
+			mobile = #{mobile,jdbcType=VARCHAR}
+	</select>
+	
+	
+	<select id="queryUseMenu" resultMap="BaseResultMap">
+		select 
+			om.menu_id,
+			om.menu_text,
+			om.menu_url
+		from 
+			user_role oro,
+			role_permis rp,
+			om_menu om
+		where 
+			oro.user_id = #{userId}
+		and rp.role_id = oro.role_id
+		and om.permis_id = rp.permis_id
+		order by om.menu_order	
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from om_menu
+	</select>
+	
+	<delete id="delate" parameterType="java.util.HashMap">
+		delete from goods_info
+		<where>
+            <if test="id!=null">
+                and id =  #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+	</delete>
+	<insert id="insert" parameterType="com.plg.shiro.entity.UserInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into user_info (
+			id,
+			user_name,
+			password,
+			mobile,
+			create_time,
+			update_time,
+			status,
+			score,
+			grade,
+			audience,
+			audience_reason
+			
+		) values ( 
+			#{id,jdbcType=INTEGER},
+			#{userName,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{mobile,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{status,jdbcType=INTEGER},
+			#{score,jdbcType=INTEGER},
+			#{grade,jdbcType=INTEGER},
+			#{audience,jdbcType=INTEGER},
+			#{audienceReason,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update user_info
+		<set>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="audienceReason != null">
+				audience_reason = #{audienceReason,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="score != null">
+				score = #{score,jdbcType=INTEGER},
+			</if>
+			<if test="grade != null">
+				grade = #{grade,jdbcType=INTEGER},
+			</if>
+			<if test="audience != null">
+				audience = #{audience,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

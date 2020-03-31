@@ -87,23 +87,19 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
 		try {
 			omUser = userService.selectByUserName(authcToken.getUsername());
 		} catch (Exception e) {
-			logger.error("身份认证发生异常", e);
 			throw new AuthenticationException("身份认证发生异常");
 		}
 
 		if (null == omUser) {
-			logger.warn("身份认证失败，登录名不存在");
 			throw new UnknownAccountException("身份认证失败，登录名不存在");
 		}
 		
 		if (1 != omUser.getStatus()) {
-			logger.warn("身份认证失败，用户已被禁用");
 			throw new LockedAccountException("身份认证失败，用户已被禁用");
 		}
 
 		// 密码验证
 		if (!omUser.getPassword().equals(Md5.getMD5ofStrByLowerCase(String.valueOf(authcToken.getPassword())))) {
-			logger.warn("身份认证失败，登录密码不正确");
 			throw new IncorrectCredentialsException("身份认证失败，登录密码不正确");
 		}
 

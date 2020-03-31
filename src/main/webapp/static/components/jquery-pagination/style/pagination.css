@@ -1,0 +1,116 @@
+@charset "UTF-8";
+
+
+#page_bar,#page_bar1,#page_bar2,.page_bar{
+	position: relative;
+    text-align: center;
+  	zoom: 1;
+}
+#page_bar:before,#page_bar:after,#page_bar1:before,#page_bar1:after ,#page_bar2:before,#page_bar2:after ,.page_bar:before,.page_bar:after{
+    content:"";
+    display:table;
+}
+#page_bar:after,#page_bar1:after,#page_bar2:after,.page_bar:after{
+	clear:both;
+	overflow:hidden;
+}
+#page_bar span,#page_bar1 span,#page_bar2 span,.page_bar span{
+	float: left;
+	margin:0 5px;
+	width: 38px;
+    height: 38px;
+    line-height: 38px;
+    color: #bdbdbd;
+    font-size: 14px;
+}
+#page_bar .active,#page_bar1 .active,#page_bar2 .active,.page_bar .active{
+	float: left;
+	margin:0 5px;
+	width: 38px;
+    height: 38px;
+    line-height: 38px;
+    background: #3c8dbc;
+    color: #fff;
+    font-size: 14px;
+    border: 1px solid #3c8dbc;
+}
+#page_bar a,#page_bar1 a,#page_bar2 a,.page_bar a{
+	float: left;
+	margin:0 5px;
+	width: 38px;
+    height: 38px;
+    line-height: 38px;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    color: #bdbdbd;
+    font-size: 14px;
+}
+#page_bar a:hover,#page_bar1 a:hover,#page_bar2 a:hover,.page_bar a:hover{
+	color:#fff;
+    background: #3c8dbc;
+}
+#page_bar .next,#page_bar .prev,#page_bar1 .next,#page_bar1 .prev,.page_bar .next,.page_bar .prev{
+	font-family: "Simsun";
+    font-size: 16px;
+    font-weight: bold;
+}
+.now,.count{
+	padding:0 5px;
+	color:#f00;
+}
+
+#page_bar input{
+    float: left;
+    margin:0 5px;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    outline: none;
+    color: #bdbdbd;
+    font-size: 14px;
+}
+
+#page_bar1 input{
+    float: left;
+    margin:0 5px;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    outline: none;
+    color: #bdbdbd;
+    font-size: 14px;
+}
+
+#page_bar2 input{
+    float: left;
+    margin:0 5px;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    outline: none;
+    color: #bdbdbd;
+    font-size: 14px;
+}
+
+.page_bar input{
+    float: left;
+    margin:0 5px;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    outline: none;
+    color: #bdbdbd;
+    font-size: 14px;
+}
