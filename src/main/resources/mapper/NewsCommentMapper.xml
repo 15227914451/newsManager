@@ -65,7 +65,17 @@
 	<select id="selectAll" resultMap="BaseResultMap">
 		select
 			<include refid="Base_Column_List" />
-		from om_menu
+		from news_comment 
+		<where>
+            <if test="newsId!=null">
+                and news_id =  #{newsId}
+            </if>
+            <if test="report!=null">
+                and report =  #{report}
+            </if>
+            
+        </where>
+        
 	</select>
 	
 	<delete id="delete" parameterType="java.util.HashMap">

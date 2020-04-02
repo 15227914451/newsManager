@@ -19,4 +19,8 @@ public interface InvitationMapper {
 
 	void delete(Invitation invitation);
 
+	List<Invitation> findByRate();
+
+	List<Invitation> selectAll();
+
 }

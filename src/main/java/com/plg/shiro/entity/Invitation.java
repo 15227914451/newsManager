@@ -8,6 +8,7 @@ public class Invitation {
 	private Date updateTime;
 	private Date createTime;
 	private Integer userId;
+	private Integer rate;
 	public Integer getId() {
 		return id;
 	}
@@ -37,6 +38,12 @@ public class Invitation {
 	}
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+	public Integer getRate() {
+		return rate;
+	}
+	public void setRate(Integer rate) {
+		this.rate = rate;
 	}
 	  
 	

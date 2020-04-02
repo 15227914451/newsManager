@@ -78,11 +78,23 @@ public class IndexController {
 		param.put("rows", 30);
 		List<NewsCategory> list = newsCategoryService.findAllList(param);
 		model.addAttribute("categoryList",list);
+		//获取热点帖子
+		List<Invitation> listInvitation = invitationService.findByRate();
+		if(listInvitation != null && listInvitation.size() > 0) {
+			for (Invitation invitation : listInvitation) {
+				if(invitation.getInvitationContent().length() > 10) {
+					invitation.setInvitationContent(invitation.getInvitationContent().substring(0, 10) + "......");
+				}
+			}
+			
+		}
+		
 		Map<String,Object> newsParam = new HashMap<>();
 		newsParam.put("begin", 0);
 		newsParam.put("rows", 10);
 		DataPage dataPage = this.findData(newsParam);
 	    model.addAttribute("dataPage",dataPage);
+	    model.addAttribute("listInvitation", listInvitation);
 		return "news/news";
 	}
 	@RequestMapping(value= {"news/getNewsList"})  
@@ -154,12 +166,85 @@ public class IndexController {
 	public String newsDetail(HttpServletRequest request, HttpServletResponse response,Model model) {
 		String parameter = request.getParameter("id");
 		News news = this.newsService.findOne(Integer.valueOf(parameter));
+		//news.setClickRate(news.getClickRate() +1);
+		Map<String,Object> map = new HashMap<>();
+		map.put("id", news.getId());
+		Integer clickRate = 1;
+		if(news.getClickRate() != null) {
+			clickRate = news.getClickRate() + 1;
+		}
+		List<Invitation> listInvitation = invitationService.findByRate();
+		if(listInvitation != null && listInvitation.size() > 0) {
+			for (Invitation invitation : listInvitation) {
+				if(invitation.getInvitationContent().length() > 10) {
+					invitation.setInvitationContent(invitation.getInvitationContent().substring(0, 10) + "......");
+				}
+			}
+			
+		}
+		
+		map.put("clickRate", clickRate);
+		this.newsService.update(map);
+		//获取评论
+		Map<String,Object> mapComment = new HashMap<>();
+		mapComment.put("newsId", news.getId());
+		mapComment.put("report", 0);
+		List<Map<String,Object>> list = new ArrayList<>();
+		List<NewsComment> listComment = this.newsCommentService.selectAll(mapComment);
+		for (NewsComment newsComment : listComment) {
+			Map<String,Object> comment = new HashMap<>();
+			comment.put("content", newsComment.getComment());
+			UserInfo user = this.userInfoService.findOne(newsComment.getUserId());
+			comment.put("id", newsComment.getId());
+			comment.put("userName", user.getMobile());
+			comment.put("createTime", newsComment.getCreateTime());
+			list.add(comment);
+		}
+		
 		HttpSession session = request.getSession(true);
 		UserInfo user =(UserInfo) session.getAttribute("userInfo");
 		model.addAttribute("userInfo",user);
 		model.addAttribute("news",news);
+		model.addAttribute("commentList",list);
+		model.addAttribute("listInvitation",listInvitation);
 		return "news/detail";
 	}
+	@RequestMapping(value={"news/invitationDetail"})  
+	public String invitationDetail(HttpServletRequest request, HttpServletResponse response,Model model) {
+		String parameter = request.getParameter("id");
+		Invitation invitation = this.invitationService.findOne(Integer.valueOf(parameter));
+		
+		Integer clickRate = 1;
+		if(invitation.getRate() != null) {
+			clickRate = invitation.getRate() + 1;
+		}
+		invitation.setRate(clickRate);
+		this.invitationService.update(invitation);
+		HttpSession session = request.getSession(true);
+		UserInfo user =(UserInfo) session.getAttribute("userInfo");
+		model.addAttribute("userInfo",user);
+		model.addAttribute("invitation",invitation);
+		return "news/invitationDetail";
+	}
+	@RequestMapping(value={"news/invitationLists"})  
+	public String invitationList(HttpServletRequest request, HttpServletResponse response,Model model) {
+		
+		//Invitation invitation = this.invitationService.findOne(Integer.valueOf(parameter));
+		List<Invitation> list = this.invitationService.findAllSize();
+		if(list != null && list.size() > 0) {
+			for (Invitation invitation : list) {
+				if(invitation.getInvitationContent().length() > 11) {
+					invitation.setInvitationContent(invitation.getInvitationContent().substring(0, 10) + "......");
+				}
+			}
+		}
+		HttpSession session = request.getSession(true);
+		UserInfo user =(UserInfo) session.getAttribute("userInfo");
+		model.addAttribute("userInfo",user);
+		model.addAttribute("invitationList",list);
+		return "news/invitationList";
+	}
+	
 	@RequestMapping(value={"news/register"})
 	@ResponseBody
 	public String register(HttpServletRequest request, HttpServletResponse response,@RequestBody(required=true) Map<String,Object> param) {
@@ -332,6 +417,39 @@ public class IndexController {
 			return data;
 		}
 	}
+	@RequestMapping(value={"news/saveNewsComment"})
+	@ResponseBody
+	public Map<String,Object> saveNewsComment(HttpServletRequest request, HttpServletResponse response,@RequestBody(required=true) Map<String,Object> param,Model modelMap) {
+		try {
+			
+			Map<String, Object> data = new HashMap<>();
+			HttpSession session = request.getSession(true);
+			UserInfo userInfo = (UserInfo)session.getAttribute("userInfo");
+			if(userInfo == null) {
+				data.put("message", Message.getMessage("E000006"));
+				data.put("code", "E000006");
+				return data;
+			}
+			String content = (String)param.get("content");
+			Integer newsId = Integer.valueOf(param.get("newsId") + "");
+			NewsComment newsComment = new NewsComment();
+			newsComment.setComment(content);
+			newsComment.setNewsId(newsId);
+			newsComment.setCreateTime(new Date());
+			newsComment.setUserId(userInfo.getId());
+			newsComment.setReport(0);
+			this.newsCommentService.save(newsComment);
+			data.put("message", Message.getMessage("S000001"));
+			data.put("code", "S000001");
+			return data;
+			
+		}catch (Exception e) {
+			Map<String, Object> data = new HashMap<>();
+			data.put("message", Message.getMessage("E000000"));
+			data.put("code", "E000000");
+			return data;
+		}
+	}
 	@RequestMapping(value={"news/deleteConment"})
 	@ResponseBody
 	public Map<String,Object> deleteConment(HttpServletRequest request, HttpServletResponse response,@RequestBody(required=true) Map<String,Object> param,Model modelMap) {
@@ -393,6 +511,27 @@ public class IndexController {
 			return data;
 		}
 	}
+	@RequestMapping(value={"news/reportContent"})
+	@ResponseBody
+	public Map<String,Object> reportContent(HttpServletRequest request, HttpServletResponse response,@RequestBody(required=true) Map<String,Object> param,Model modelMap) {
+		try {
+			Map<String, Object> data = new HashMap<>();
+			Integer id = Integer.valueOf(param.get("id") + "");
+			NewsComment newsComment = this.newsCommentService.findOne(id);
+			newsComment.setReport(1);
+			this.newsCommentService.update(newsComment);
+			data.put("message", Message.getMessage("S000001"));
+			data.put("code", "S000001");
+			return data;
+			
+		}catch (Exception e) {
+			Map<String, Object> data = new HashMap<>();
+			data.put("message", Message.getMessage("E000000"));
+			data.put("code", "E000000");
+			return data;
+		}
+	}
+	
 	
 	
 	@RequestMapping("news/contentList")

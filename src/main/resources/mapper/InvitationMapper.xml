@@ -7,10 +7,11 @@
 		<result column="update_time" 	jdbcType="TIMESTAMP" 	property="updateTime" />
 		<result column="create_time" 	jdbcType="TIMESTAMP" 	property="createTime" />
 		<result 	column="user_id" 		jdbcType="INTEGER" 		property="userId" />
+		<result 	column="rate" 		jdbcType="INTEGER" 		property="rate" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, invitation_content,user_id,create_time,
-		update_time
+		update_time,rate
 	</sql>
 	
 	<select id="findAllList"  parameterType="java.util.HashMap" resultMap="BaseResultMap">
@@ -55,10 +56,15 @@
 		order by om.menu_order	
 	</select>
 	
+	<select id="findByRate" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from invitation order by rate desc limit 0,5
+	</select>
 	<select id="selectAll" resultMap="BaseResultMap">
 		select
 			<include refid="Base_Column_List" />
-		from om_menu
+		from invitation order by rate desc
 	</select>
 	
 	<delete id="delete" parameterType="java.util.HashMap">
@@ -77,7 +83,8 @@
 			
 			create_time,
 			update_time,
-			user_id
+			user_id,
+			rate
 		) values ( 
 			#{id,jdbcType=INTEGER},
 			#{invitationContent,jdbcType=LONGVARCHAR},
@@ -85,7 +92,8 @@
 			#{createTime,jdbcType=TIMESTAMP},
 			
 			#{updateTime,jdbcType=TIMESTAMP},
-			#{userId,jdbcType=INTEGER}
+			#{userId,jdbcType=INTEGER},
+			#{rate,jdbcType=INTEGER}
 			
 		)
 	</insert>
@@ -99,6 +107,9 @@
 			
 			<if test="updateTime != null">
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="rate != null">
+				rate = #{rate,jdbcType=INTEGER},
 			</if>
 		</set>
 		where id = #{id,jdbcType=INTEGER}

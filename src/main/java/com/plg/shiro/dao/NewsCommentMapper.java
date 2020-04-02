@@ -17,6 +17,10 @@ public interface NewsCommentMapper {
 
 	void delete(NewsComment newsComment);
 
+	List<NewsComment> selectAll(Map<String, Object> mapComment);
+
+	void insert(NewsComment newsComment);
+
 	
 
 	

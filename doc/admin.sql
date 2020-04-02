@@ -357,3 +357,4 @@ CREATE TABLE `user_role` (
 -- Records of user_role
 -- ----------------------------
 INSERT INTO `user_role` VALUES ('1', '1', '1', '2020-03-01 21:17:36', '2020-03-01 21:17:40');
+ALTER TABLE invitation ADD COLUMN rate int (10) DEFAULT 0;

@@ -31,7 +31,7 @@
       <input class="hidden" id="toggle-checkbox" type="checkbox">
       <div class="hidden-xs">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">首页</a></li>
+          <li class="active"><a href="/news">首页</a></li>
          
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -165,7 +165,7 @@
   </div>
   
   <div class="footer">
-    © 2017 拴蛋头条 中国互联网举报中心京ICP证1401号京ICP备125439号-3京公网安备
+   		京公网安备
   </div>
 </body>
 <script type="text/javascript">

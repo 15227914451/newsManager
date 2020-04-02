@@ -50,4 +50,15 @@ public class InvitationService  implements IInvitationService{
 		invitationMapper.delete(invitation);
 	}
 
+	@Override
+	public List<Invitation> findByRate() {
+		return invitationMapper.findByRate();
+	}
+
+	@Override
+	public List<Invitation> findAllSize() {
+		// TODO Auto-generated method stub
+		return invitationMapper.selectAll();
+	}
+
 }

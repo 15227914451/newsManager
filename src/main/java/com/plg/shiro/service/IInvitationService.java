@@ -19,4 +19,8 @@ public interface IInvitationService {
 
 	void delete(Invitation findOne);
 
+	List<Invitation> findByRate();
+
+	List<Invitation> findAllSize();
+
 }

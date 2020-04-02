@@ -17,4 +17,8 @@ public interface INewsCommentService {
 
 	void delete(NewsComment newsComment);
 
+	List<NewsComment> selectAll(Map<String, Object> mapComment);
+
+	void save(NewsComment newsComment);
+
 }

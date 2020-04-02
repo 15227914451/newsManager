@@ -19,6 +19,7 @@ public  class Message {
     	messageMap.put("E000002", "账号或者密码不正确。");
     	messageMap.put("E000003", "参数不合法。");
     	messageMap.put("E000005", "该手机号已注册。");
+    	messageMap.put("E000006", "用户未登录。");
     }
     
     public static String getMessage(String code) {

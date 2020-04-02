@@ -43,5 +43,17 @@ public class NewsCommentService implements INewsCommentService{
 		// TODO Auto-generated method stub
 		newsCommentMapper.delete(newsComment);
 	}
+
+	@Override
+	public List<NewsComment> selectAll(Map<String, Object> mapComment) {
+		// TODO Auto-generated method stub
+		return newsCommentMapper.selectAll(mapComment);
+	}
+
+	@Override
+	public void save(NewsComment newsComment) {
+		// TODO Auto-generated method stub
+		newsCommentMapper.insert(newsComment);
+	}
 	
 }

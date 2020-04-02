@@ -25,7 +25,7 @@
       <input class="hidden" id="toggle-checkbox" type="checkbox">
       <div class="hidden-xs">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">首页</a></li>
+          <li class="active"><a href="/news/">首页</a></li>
          
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -54,7 +54,7 @@
 			 </c:forEach>
         </div>
       </div>
-      <div class="col-sm-10">
+      <div class="col-sm-7">
         <div class="news-list" id="newsList">
           	<c:forEach items="${dataPage.data}" var="news" varStatus="vs">
 	          <div class="news-list-item clearfix">
@@ -102,32 +102,24 @@
       </div>
       
       
-      
-     <!--  <div class="col-sm-3">
-        <div class="search-bar">
-          <input type="search" class="form-control" placeholder="搜一下">
+    </div>
+   <div class="col-sm-3">
+        <div>
+          <span>热点帖子</span>&nbsp;&nbsp;&nbsp;&nbsp; <a href="/news/invitationLists">查看更多</a>
         </div>
-        <div class="side-bar-card flag clearfix">
-          <div class="col-xs-5">
-            <img src="img/1-1.png">
-          </div>
-          <div class="col-xs-7">
-            <div class="text-lg">有害信息举报专区</div>
-            <div>举报电话：12377</div>
-          </div>
-        </div>
-        <div class="side-bar-card">
-          <div class="card-title">24小时热闻</div>
-          <div class="card-body">
-            <div class="list">
-              <div class="item">
-                <div class="title">Lorem ipsum dolor sit amet, consectetur adipisicing </div>
-                <div class="desc">15k阅读 1k评论</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
+        <c:forEach items="${listInvitation}" var="invitation" varStatus="in">
+	        <div class="side-bar-card">
+	          <div class="card-body">
+	            <div class="list">
+	              <div class="item">
+	                <div class="title"><a onclick="invitationDetail('${invitation.id}')">${invitation.invitationContent}<a></div>
+	                <div class="desc">${invitation.rate}阅读 </div>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+	     </c:forEach>
+      </div>
     </div>
   </div>
 </body>
@@ -154,6 +146,9 @@
 	}
 	function detail(id){
 		window.location.href= "/news/newsDetail?id="+id;
+	}
+	function invitationDetail(id){
+		window.location.href= "/news/invitationDetail?id="+id;
 	}
 </script>
 </html>

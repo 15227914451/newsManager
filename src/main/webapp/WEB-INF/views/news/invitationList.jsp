@@ -41,41 +41,19 @@
     </div>
   </div>
   <div class="container">
-    
-  </div>
-  <div class="container">
     <div class="col-md-10">
-      <h1 class="news-title">${news.newsTitle}</h1>
-      <input type = "hidden" id="newsId"  value="${news.id}">
-      <div class="news-status">${news.clickRate}查看.发布时间:${news.createTime}
-      
-      </div>
-      <div class="news-content">
-        <blockquote>
-          ${news.newsContent}
-      </div>
-      <div style="border-top:1px solid #000"></div>
-      	  <div>
-	         <h4>评论:</h4>
-	         
-	          <textarea id="content" cols="4" rows="5" style="width:500px;height:100px"></textarea>
-	          
+       <c:forEach items="${invitationList}" var="invitation" varStatus="in">
+	      <input type = "hidden" id="conmentId"  value="${invitation.id}">
+	      <div class="news-status">${invitation.rate}查看.发布时间:${invitation.createTime}
+	      
 	      </div>
-	      <div>
-	      	<input type="button" value='提交' onclick = "contentSubmit()"/>
-	      	</div>
-	      <div>
-	         <h4>评论列表:</h4>
-	          <c:forEach items="${commentList}" var="comment" varStatus="co">
-	         	   <div style="border-top:1px solid #000"></div>
-	         	   <div class="news-content">
-	         	   		${comment.content}
-	         	   </div>
-	         	   <div class="news-status">${comment.userName}.发布时间:${comment.createTime}</div>
-	         	   <input type="button" value="举报" onclick="report('${comment.id}')">
-	          </c:forEach>
+	      <div class="news-content">
+	        <blockquote>
+	          <a href = "/news/invitationDetail?id=${invitation.id}">${invitation.invitationContent}</a>
 	      </div>
-     </div> 
+	       <div style="border-top:1px solid #000"></div>
+     	</c:forEach>
+    </div>
     <div class="col-md-2">
         <div>
           <span>热点帖子</span>&nbsp;&nbsp;&nbsp;&nbsp; <a href="/news/manager">查看更多</a>
@@ -92,9 +70,8 @@
 	          </div>
 	        </div>
 	     </c:forEach>
-  </div>
+	  </div>
  </div>
- <div> </div>
 </body>
 <script type="text/javascript">
 	function contentSubmit(){

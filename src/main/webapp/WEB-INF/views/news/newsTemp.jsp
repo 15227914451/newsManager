@@ -21,7 +21,7 @@
           	<c:forEach items="${dataPage.data}" var="news" varStatus="vs">
 	          <div class="news-list-item clearfix">
 	            <div class="col-xs-7">
-	              <a href="#" class="title">${news.newsTitle}</a>
+	              <a onclick="detail('${news.id}')" class="title">${news.newsTitle}</a>
 	              <div class="info">
 	                <span></span>${news.newsAuthor}</span> ⋅
 	                <span>${news.clickRate}点击量</span> ⋅
