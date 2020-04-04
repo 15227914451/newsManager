@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/context/spring-context-4.0.xsd 
 	http://www.springframework.org/schema/task
 	http://www.springframework.org/schema/task/spring-task-4.0.xsd
-	http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
 	<!-- <mvc:annotation-driven /> 是一种简写形式，完全可以手动配置替代这种简写形式，简写形式可以让初学都快速应用默认配置方案。 
@@ -89,6 +89,7 @@
 	    <property name="maxUploadSize">  
 	        <value>104857600</value>  
 	    </property>  
-	</bean>  
+	</bean>
+	<task:annotation-driven />  
 	
 </beans>

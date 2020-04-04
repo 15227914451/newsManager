@@ -19,4 +19,6 @@ public interface INewsService {
 
 	void delete(Map<String, Object> param);
 
+	List<News> findByRate();
+
 }

@@ -18,4 +18,6 @@ public interface IUserInfoService {
 
 	UserInfo findOneByMobile(String mobile);
 
+	List<UserInfo> findAll();
+
 }

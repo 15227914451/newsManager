@@ -20,4 +20,6 @@ public interface NewsMapper {
 
 	void delete(Map<String, Object> param);
 
+	List<News> findByRate();
+
 }

@@ -19,4 +19,6 @@ public interface UserInfoMapper {
 
 	UserInfo findOneByMobile(String mobile);
 
+	List<UserInfo> findAll();
+
 }

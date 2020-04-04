@@ -50,6 +50,12 @@ public class UserInfoService implements IUserInfoService{
 		return userInfoMapper. findOneByMobile(mobile);
 	}
 
+	@Override
+	public List<UserInfo> findAll() {
+		// TODO Auto-generated method stub
+		return userInfoMapper.findAll();
+	}
+
 	
 
 	

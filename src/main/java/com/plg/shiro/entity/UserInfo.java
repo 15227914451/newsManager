@@ -8,13 +8,14 @@ public class UserInfo implements Serializable {
 	private String userName;
 	private String password;
 	private String mobile;
-	private Integer status; //0-禁言  1 未禁言
+	private Integer status; //0-未禁言  1 禁言
 	private Integer score;
 	private Integer grade; //0-普通用户 1-发布者
 	private Date createTime;
 	private Date updateTime;
 	private Integer audience;//0-未审批  1 -审批通过 2-审批拒绝
 	private String audienceReason;
+	private Date sendScoreTime;//赠送积分时间
 	public Integer getId() {
 		return id;
 	}
@@ -80,6 +81,12 @@ public class UserInfo implements Serializable {
 	}
 	public void setAudienceReason(String audienceReason) {
 		this.audienceReason = audienceReason;
+	}
+	public Date getSendScoreTime() {
+		return sendScoreTime;
+	}
+	public void setSendScoreTime(Date sendScoreTime) {
+		this.sendScoreTime = sendScoreTime;
 	}
 	 
 }

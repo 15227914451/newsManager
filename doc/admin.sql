@@ -358,3 +358,5 @@ CREATE TABLE `user_role` (
 -- ----------------------------
 INSERT INTO `user_role` VALUES ('1', '1', '1', '2020-03-01 21:17:36', '2020-03-01 21:17:40');
 ALTER TABLE invitation ADD COLUMN rate int (10) DEFAULT 0;
+/*添加字段定时发送积分时间  2020年4月4日10:00:02*/
+ALTER TABLE user_info ADD COLUMN send_score_time datetime DEFAULT NULL;

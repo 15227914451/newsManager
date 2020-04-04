@@ -36,6 +36,11 @@
 		
 		 limit #{begin} , #{rows}
 	</select>
+	<select id="findByRate" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from news order by click_rate desc limit 0,3
+	</select>
 	<select id="findSize"  parameterType="java.util.HashMap" resultType="Integer">
 		select count(1) from news 
 		 <where>

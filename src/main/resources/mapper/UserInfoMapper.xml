@@ -13,11 +13,12 @@
 		<result 	column="grade" 		jdbcType="INTEGER" 		property="grade" />
 		<result 	column="audience" 		jdbcType="INTEGER" 		property="audience" />
 		<result 	column="audience_reason" 		jdbcType="VARCHAR" 		property="audienceReason" />
+		<result 	column="send_score_time" 		jdbcType="TIMESTAMP" 		property="sendScoreTime" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, user_name, password, mobile, create_time, update_time, status,
 		score,
-		grade
+		grade,send_score_time
 	</sql>
 	
 	<select id="findAllList"  parameterType="java.util.HashMap" resultMap="BaseResultMap">
@@ -56,6 +57,11 @@
 		from user_info
 		where 
 			id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="findAll"  resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_info
 	</select>
 	<select id="findOneByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select
@@ -108,7 +114,8 @@
 			score,
 			grade,
 			audience,
-			audience_reason
+			audience_reason,
+			send_score_time
 			
 		) values ( 
 			#{id,jdbcType=INTEGER},
@@ -121,7 +128,8 @@
 			#{score,jdbcType=INTEGER},
 			#{grade,jdbcType=INTEGER},
 			#{audience,jdbcType=INTEGER},
-			#{audienceReason,jdbcType=VARCHAR}
+			#{audienceReason,jdbcType=VARCHAR},
+			#{sendScoreTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
 	
@@ -148,6 +156,9 @@
 			</if>
 			<if test="audience != null">
 				audience = #{audience,jdbcType=INTEGER},
+			</if>
+			<if test="sendScoreTime != null">
+				send_score_time = #{sendScoreTime,jdbcType=TIMESTAMP},
 			</if>
 		</set>
 		where id = #{id,jdbcType=INTEGER}

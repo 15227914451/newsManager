@@ -18,6 +18,7 @@
   
       <div class="col-sm-10">
         <div class="news-list" id="newsList">
+          <input id ="selectCatogory" type = 'hidden' value='${catagoryId}'>
           	<c:forEach items="${dataPage.data}" var="news" varStatus="vs">
 	          <div class="news-list-item clearfix">
 	            <div class="col-xs-7">

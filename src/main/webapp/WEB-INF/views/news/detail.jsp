@@ -78,7 +78,7 @@
      </div> 
     <div class="col-md-2">
         <div>
-          <span>热点帖子</span>&nbsp;&nbsp;&nbsp;&nbsp; <a href="/news/manager">查看更多</a>
+          <span>热点帖子</span>&nbsp;&nbsp;&nbsp;&nbsp; <a href="/news/invitationLists">查看更多</a>
         </div>
         <c:forEach items="${listInvitation}" var="invitation" varStatus="in">
 	        <div class="side-bar-card">
@@ -149,6 +149,9 @@
             }
         });
 		
+	}
+	function invitationDetail(id){
+		window.location.href= "/news/invitationDetail?id="+id;
 	}
 </script>
 </html>

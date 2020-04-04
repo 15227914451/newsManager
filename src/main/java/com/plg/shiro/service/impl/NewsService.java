@@ -52,5 +52,11 @@ public class NewsService implements INewsService {
 		
 	}
 
+	@Override
+	public List<News> findByRate() {
+		// TODO Auto-generated method stub
+		return newsMapper.findByRate();
+	}
+
 
 }

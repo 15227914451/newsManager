@@ -43,10 +43,20 @@
     </div>
   </div>
   <div class="container">
+	  <ul class="list-group">
+	  	<c:forEach items="${listNews}" var="newsHot" varStatus="vs">
+	  		<div style="display:inline-block;"><a href="#" onclick="detail('${newsHot.id}')"><li class="list-group-item"><h4>${newsHot.newsTitle}</h4>&nbsp;&nbsp;&nbsp;&nbsp; ${news.newsAuthor}⋅
+	                ${newsHot.clickRate}点击量⋅
+	                ${newsHot.createTime}</li></a>
+	        </div>
+	  	</c:forEach>	
+	  </ul>
+  
+    
     <div class="row">
       <div class="col-sm-2">
         <div class="hidden-xs list-group side-bar">
-        	<a onclick="getNews('category0')" class="list-group-item active">综合</a>
+        	<a onclick="getNews('category0')" id= "category0" class="list-group-item active">综合</a>
         	<c:forEach items="${categoryList}" var="category" varStatus="vs">
 	 				
 			          <a onclick="getNews('category${category.id}')" id= "category${category.id}" class="list-group-item">${category.categoryName}</a>
@@ -56,6 +66,7 @@
       </div>
       <div class="col-sm-7">
         <div class="news-list" id="newsList">
+          	  <input id ="selectCatogory" type = 'hidden' value='${catagoryId}'>
           	<c:forEach items="${dataPage.data}" var="news" varStatus="vs">
 	          <div class="news-list-item clearfix">
 	            <div class="col-xs-7">
@@ -77,7 +88,7 @@
 		 										<a style="text-decoration: none">上一页</a>    
 		 									</c:when>
 		 									<c:otherwise>
-		 										<a href="javascript:doPage(1);">首页</a>    
+		 										<a href="javascript:doPage(1,);">首页</a>    
 		 										<a href="javascript:doPage(${dataPage.upPage});">上一页</a>    
 		 									</c:otherwise>
 		 								</c:choose>
@@ -149,6 +160,27 @@
 	}
 	function invitationDetail(id){
 		window.location.href= "/news/invitationDetail?id="+id;
+	}
+	function doPage(page){
+		var params = {};
+		var selectCatogory = $("#selectCatogory").val();
+	 	params["begin"] = page;
+	 	params["param"] = selectCatogory;
+		$.ajax({
+ 	        type: "POST",//方法类型
+ 	        contentType : "application/json",
+ 	        dataType: "html",//预期服务器返回的数据类型
+ 	        url: "/news/getNewsList" ,//url
+ 	        data: JSON.stringify(params),
+ 	        success: function (result) {
+ 	             
+ 	          	 $("#newsList").html("");
+ 	          	 $("#newsList").html(result);
+ 	        },
+ 	        error : function() {
+ 	            alert("系统错误。");
+ 	        }
+ 	    });
 	}
 </script>
 </html>

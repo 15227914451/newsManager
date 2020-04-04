@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -46,7 +48,7 @@ import com.plg.util.Message;
 
 
 @Controller
-
+@Component
 public class IndexController {
 	@Resource
 	private IUserInfoService userInfoService;
@@ -88,6 +90,14 @@ public class IndexController {
 			}
 			
 		}
+		//获取热点新闻
+		List<News> listNews = this.newsService.findByRate();
+		for (News news : listNews) {
+			String newsTitle = news.getNewsTitle();
+			if(newsTitle.length() > 20) {
+				news.setNewsTitle(newsTitle.substring(0, 20) + "......");
+			}
+		}
 		
 		Map<String,Object> newsParam = new HashMap<>();
 		newsParam.put("begin", 0);
@@ -95,6 +105,7 @@ public class IndexController {
 		DataPage dataPage = this.findData(newsParam);
 	    model.addAttribute("dataPage",dataPage);
 	    model.addAttribute("listInvitation", listInvitation);
+	    model.addAttribute("listNews", listNews);
 		return "news/news";
 	}
 	@RequestMapping(value= {"news/getNewsList"})  
@@ -108,11 +119,13 @@ public class IndexController {
 		if(beginPage != null && !"".equals(beginPage + "")) {
 			begin =Integer.valueOf(beginPage + "");
 		}
-		newsParam.put("begin", (begin -1) * 10 );
-		newsParam.put("rows", 10);
+		Integer rows = 2;
+		newsParam.put("begin", (begin -1) * rows );
+		newsParam.put("rows", rows);
+		Integer catogryId = 0;
 		if(StringUtils.isNotBlank((String)map.get("param"))) {
 			String parameter = (String)map.get("param");
-			Integer catogryId = 0;
+			
 			if(parameter.contains("category")) {
 				String replace = parameter.replace("category", "");
 				
@@ -125,17 +138,19 @@ public class IndexController {
 	
 		DataPage dataPage = this.findData(newsParam);
 		Map<String,Object> mapData = new HashMap<>();
+		mapData.put("catagoryId", catogryId);
 		mapData.put("dataPage", dataPage);
 		return new ModelAndView("news/newsTemp",mapData);
 	}
 	private DataPage findData(Map<String, Object> newsParam) {
 		DataPage dataPage = new DataPage();
+		Integer rows = Integer.valueOf(newsParam.get("rows") + "");
 		Integer size = newsService.findSize(newsParam);
 		List<News> newsList = newsService.findAllList(newsParam);
-		Integer pageNo = Integer.valueOf(newsParam.get("begin") + "") +1;
-		Integer totalPage = size%10 > 0 ? size/10+1 : size/10;
-		Integer nextPage =  Integer.valueOf(newsParam.get("begin") + "") +2;
-		Integer upPage = Integer.valueOf(newsParam.get("begin") + "");
+		Integer pageNo = Integer.valueOf(newsParam.get("begin") + "")/rows +1;
+		Integer totalPage = size%2 > 0 ? size/2+1 : size/2;
+		Integer nextPage =  Integer.valueOf(newsParam.get("begin") + "")/rows +2;
+		Integer upPage = Integer.valueOf(newsParam.get("begin") + "")/rows;
 		dataPage.setData(newsList);
 		dataPage.setNextPage(nextPage);
 		dataPage.setPageNo(pageNo);
@@ -220,10 +235,19 @@ public class IndexController {
 		}
 		invitation.setRate(clickRate);
 		this.invitationService.update(invitation);
+		//获取热点新闻
+		List<News> listNews = this.newsService.findByRate();
+		for (News news : listNews) {
+			String newsTitle = news.getNewsTitle();
+			if(newsTitle.length() > 20) {
+				news.setNewsTitle(newsTitle.substring(0, 20) + "......");
+			}
+		}
 		HttpSession session = request.getSession(true);
 		UserInfo user =(UserInfo) session.getAttribute("userInfo");
 		model.addAttribute("userInfo",user);
 		model.addAttribute("invitation",invitation);
+		model.addAttribute("listNews",listNews);
 		return "news/invitationDetail";
 	}
 	@RequestMapping(value={"news/invitationLists"})  
@@ -238,10 +262,19 @@ public class IndexController {
 				}
 			}
 		}
+		//获取热点新闻
+		List<News> listNews = this.newsService.findByRate();
+		for (News news : listNews) {
+			String newsTitle = news.getNewsTitle();
+			if(newsTitle.length() > 20) {
+				news.setNewsTitle(newsTitle.substring(0, 20) + "......");
+			}
+		}
 		HttpSession session = request.getSession(true);
 		UserInfo user =(UserInfo) session.getAttribute("userInfo");
 		model.addAttribute("userInfo",user);
 		model.addAttribute("invitationList",list);
+		model.addAttribute("listNews",listNews);
 		return "news/invitationList";
 	}
 	
@@ -282,6 +315,7 @@ public class IndexController {
 			userInfo.setScore(score);
 			userInfo.setUpdateTime(new Date());
 			userInfo.setCreateTime(new Date());
+			userInfo.setSendScoreTime(new Date());
 			userInfo.setStatus(0);
 			userInfo.setGrade(0);
 			this.userInfoService.insert(userInfo);

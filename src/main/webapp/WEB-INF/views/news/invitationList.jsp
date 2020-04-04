@@ -56,15 +56,17 @@
     </div>
     <div class="col-md-2">
         <div>
-          <span>热点帖子</span>&nbsp;&nbsp;&nbsp;&nbsp; <a href="/news/manager">查看更多</a>
+          <span>热点新闻</span>&nbsp;&nbsp;&nbsp;&nbsp; <a href="/news">返回首页</a>
         </div>
-        <c:forEach items="${listInvitation}" var="invitation" varStatus="in">
+        <c:forEach items="${listNews}" var="newsHot" varStatus="in">
 	        <div class="side-bar-card">
 	          <div class="card-body">
 	            <div class="list">
 	              <div class="item">
-	                <div class="title"><a onclick="invitationDetail('${invitation.id}')">${invitation.invitationContent}<a></div>
-	                <div class="desc">${invitation.rate}阅读 </div>
+	                <div class="title"><a onclick="invitationDetail('${newsHot.id}')">${newsHot.newsTitle}<a></div>
+	                <div class="desc"> ${news.newsAuthor}⋅
+	                ${newsHot.clickRate}阅读⋅
+	                ${newsHot.createTime}</div>
 	              </div>
 	            </div>
 	          </div>
