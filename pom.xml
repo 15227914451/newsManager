@@ -16,7 +16,7 @@
 		<!-- <mysql.connect.version>5.1.38</mysql.connect.version> -->
 		<mysql.connect.version>5.1.6</mysql.connect.version>
 		<druid.version>1.0.27</druid.version>
-		<springframework.version>4.1.6.RELEASE</springframework.version>
+		<springframework.version>5.2.20.RELEASE</springframework.version>
 		<junit.version>4.12</junit.version>
 		<slf4j-log4j12.version>1.7.14</slf4j-log4j12.version>
 		<log4j.version>1.2.17</log4j.version>
